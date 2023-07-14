@@ -11,3 +11,6 @@ access_token = ''
 
 db_url_object = 'postgresql://postgres:password@localhost:5432/db_diplom'
 
+peer_id = 51692363
+
+user_id = 716008483
