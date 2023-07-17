@@ -1,7 +1,17 @@
 certifi==2023.5.7
 charset-normalizer==3.1.0
+DateTime==5.1
+greenlet==2.0.2
 idna==3.4
 psycopg2==2.9.6
+pytz==2023.3
 requests==2.31.0
+SQLAlchemy==2.0.18
+SQLAlchemy-Utils==0.41.1
+typing_extensions==4.7.1
 urllib3==2.0.3
 vk-api==11.9.9
+zope.interface==6.0
+
+
+

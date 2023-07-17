@@ -28,16 +28,12 @@ class VkTools():
             print(f'"Сервис временно не доступен, попробуйте позднее" error = {e}')
 
         result_1 = {'name': (info['first_name'] + ' ' + info['last_name']) if 'first_name' in info and 'last_name' in info else None,
-                  'sex': info.get('sex'),
-                  'city': info.get('city')['title'] if 'city' in info else None,
-                  'year': self._bdate_to_year(info.get('bdate')),
-                  }
-
+                    'sex': info.get('sex'),
+                    'city': info.get('city')["title"] if "city" in info else None,
+                    'year': self._bdate_to_year(info.get('bdate')),
+                }
 
         return result_1
-
-
-
 
     def search_worksheet(self, params, offset):
         try:
@@ -49,16 +45,18 @@ class VkTools():
                                        'has_photo': True,
                                        'age_from': params['year'] - 5,
                                        'age_to': params['year'] + 5,
+                                       'status': 6,
                                        }
                                       )
         except ApiError as e:
             users = []
             print(f'error = {e}')
 
-        result_2 = [{
+        result_2 = [
+            {
             'name': item['first_name'] + ' ' + item['last_name'],
             'id': item['id']
-        } for item in users['items'] if item['is_closed'] is False
+            } for item in users['items'] if item['is_closed'] is False
         ]
         return result_2
 
@@ -69,7 +67,7 @@ class VkTools():
             photos = self.vkapi.method('photos.get',
                                        {'owner_id': id,
                                         'album_id': 'profile',
-                                        'extended': 1
+                                        "extended": 1
                                         }
                                        )
 
@@ -77,12 +75,15 @@ class VkTools():
             photos = {}
             print(f'error = {e}')
 
-        result = [{'owner_id': item['owner_id'],
-                   'id': item['id'],
-                   'likes': item['likes']['count'],
-                   'comments': item['comments']['count']
-                   } for item in photos['items']
-                  ]
+        result = [
+            {
+                'owner_id': item['owner_id'],
+                'id': item['id'],
+                'likes': item['likes']["count"],
+                'comments': item['comments']["count"]
+            } for item in photos["items"]
+
+        ]
 
         result_sorted = sorted(result, key=itemgetter('likes', 'comments'), reverse=True)
 
