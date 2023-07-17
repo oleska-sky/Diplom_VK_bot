@@ -49,10 +49,8 @@ class BotInterface():
                     self.message_send(event.user_id, f'Привет, {self.params["name"]}!', keyboard=keyboard.get_keyboard())
                     if not self.params['city']:# проверка на наличие в анкете:город
                         self.city_input(event.user_id)
-                        continue
                     elif not self.params['year']:#  проверка на наличие в анкете: возраст
                         self.year_input(event.user_id)
-                        continue
                 elif event.text.lower() == 'поиск':
                     self.message_send(
                         event.user_id, 'Начинаем поиск, жми "поиск"', keyboard=keyboard.get_keyboard())
