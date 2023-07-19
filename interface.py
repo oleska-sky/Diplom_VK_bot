@@ -70,7 +70,7 @@ class BotInterface:
                                 if event.type == VkEventType.MESSAGE_NEW and event.to_me:
                                     city = event.text.title()
                                     self.params["city"] = city
-                                    if city in city_all_list():
+                                    if city in city_all_set():
                                         self.message_send(
                                             event.user_id,
                                             f' {self.params["city"]} - город выбран. Введите: "поиск"')
@@ -121,7 +121,6 @@ class BotInterface:
                         """ проверка анкеты в бд в соответствии с event.user_id """
                     while self.check_user(engine, event.user_id, worksheet["id"]) is True:
                         worksheet = self.worksheets.pop()
-                        
                     else:
                         self.message_send(
                             event.user_id, 'Извините, анкеты закончились')
@@ -153,11 +152,11 @@ class BotInterface:
 
 
     # города России
-def city_all_list():
+def city_all_set():
     url = 'https://ru.wikipedia.org/wiki/%D0%A1%D0%BF%D0%B8%D1%81%D0%BE%D0%BA_%D0%B3%D0%BE%D1%80%D0%BE%D0%B4%D0%BE%D0%B2_%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D0%B8'
     df = pd.read_html(url)[0]
     df_city = df['Город']
-    cities = df_city.values.tolist()
+    cities = df_city.values.toSet()
     # pprint(city_list)
     return cities
     print(cities)
