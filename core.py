@@ -1,5 +1,6 @@
 from datetime import datetime
 from pprint import pprint
+
 import vk_api
 from vk_api.exceptions import ApiError
 
@@ -7,7 +8,7 @@ from operator import itemgetter
 from config import access_token, user_id
 
 
-class VkTools():
+class VkTools:
     def __init__(self, access_token):
         self.vkapi = vk_api.VkApi(token=access_token)
 
@@ -27,12 +28,12 @@ class VkTools():
             info = {}
             print(f'"Сервис временно не доступен, попробуйте позднее" error = {e}')
 
-        result_1 = {'name': (info['first_name'] + ' ' + info['last_name']) if 'first_name' in info and 'last_name' in info else None,
+        result_1 = {'name': (info['first_name'] + ' ' + info['last_name'])
+        if 'first_name' in info and 'last_name' in info else None,
                     'sex': info.get('sex'),
-                    'city': info.get('city')["title"] if "city" in info else None,
+                    'city': info.get('city')["title"] if info.get('city') is not None else None,
                     'year': self._bdate_to_year(info.get('bdate')),
-                }
-
+                    }
         return result_1
 
     def search_worksheet(self, params, offset):
@@ -51,16 +52,15 @@ class VkTools():
         except ApiError as e:
             users = []
             print(f'error = {e}')
+        # pprint(users)
 
         result_2 = [
             {
-            'name': item['first_name'] + ' ' + item['last_name'],
-            'id': item['id']
+                'name': item['first_name'] + ' ' + item['last_name'],
+                'id': item['id']
             } for item in users['items'] if item['is_closed'] is False
         ]
         return result_2
-
-
 
     def get_photos(self, id):
         try:
@@ -76,17 +76,13 @@ class VkTools():
             print(f'error = {e}')
 
         result = [
-            {
-                'owner_id': item['owner_id'],
-                'id': item['id'],
-                'likes': item['likes']["count"],
-                'comments': item['comments']["count"]
-            } for item in photos["items"]
-
+            {'owner_id': item['owner_id'],
+             'id': item['id'],
+             'likes': item['likes']["count"],
+             'comments': item['comments']["count"]
+             } for item in photos["items"]
         ]
-
         result_sorted = sorted(result, key=itemgetter('likes', 'comments'), reverse=True)
-
         return result_sorted[:3]
 
 
@@ -99,4 +95,3 @@ if __name__ == '__main__':
     photos = tools.get_photos(worksheet['id'])
 
     pprint(worksheets)
-

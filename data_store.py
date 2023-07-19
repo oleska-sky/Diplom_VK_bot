@@ -1,25 +1,24 @@
 # импорты
 import sqlalchemy as sq
-from sqlalchemy.orm import declarative_base, Session
+from sqlalchemy.orm import declarative_base
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import Session
-from sqlalchemy_utils import database_exists, create_database, drop_database
+
 from config import db_url_object
 
 # схема БД
 metadata = MetaData()
 Base = declarative_base()
 engine = create_engine(db_url_object)
+
+
 class Viewed(Base):
     __tablename__ = 'viewed'
     profile_id = sq.Column(sq.Integer, primary_key=True)
     worksheet_id = sq.Column(sq.Integer, primary_key=True)
 
 
-
-
 # добавление записи в бд
-
 def add_user(engine, profile_id, worksheet_id):
     with Session(engine) as session:
         to_bd = Viewed(profile_id=profile_id, worksheet_id=worksheet_id)
@@ -28,7 +27,6 @@ def add_user(engine, profile_id, worksheet_id):
 
 
 # извлечение записей из БД
-
 def check_user(engine, profile_id, worksheet_id):
     with Session(engine) as session:
         from_bd = session.query(Viewed).filter(
@@ -45,9 +43,3 @@ if __name__ == '__main__':
     # add_user(engine, 2113, 124512)
     # res = check_user(engine, 2113, 124512)
     # print(res)
-
-
-
-
-
-
